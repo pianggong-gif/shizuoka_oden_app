@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>静岡おでん おがわ Guide</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans:wght@400;500;700&display=swap');
+:root{
+  --bg:#1a0a00;--surface:#2a1500;--card:#321a00;--border:#5a3a10;
+  --orange:#f07030;--amber:#e8a030;--cream:#f5e8d0;--white:#fff8f0;
+  --muted:#b09070;--green:#4a9a60;--blue:#3868c8;--radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Noto Sans','Noto Sans JP',sans-serif;background:var(--bg);color:var(--cream);min-height:100vh;font-size:15px;}
+
+.topbar{background:var(--surface);border-bottom:2px solid var(--orange);padding:8px 12px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;}
+.logo-area{display:flex;align-items:center;gap:8px;}
+.logo-img{width:40px;height:40px;border-radius:50%;border:2px solid var(--orange);object-fit:cover;background:#fff;flex-shrink:0;}
+.logo-text{font-size:13px;font-weight:700;color:var(--orange);line-height:1.3;}
+.logo-text span{color:var(--muted);font-size:10px;display:block;font-weight:400;}
+.lang-sel{display:flex;gap:3px;flex-wrap:wrap;justify-content:flex-end;}
+.lbtn{background:transparent;border:1px solid var(--border);color:var(--muted);padding:3px 6px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:500;}
+.lbtn.on{background:var(--orange);border-color:var(--orange);color:#fff;}
+
+.tabs{display:flex;background:var(--surface);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{flex:1;min-width:52px;padding:9px 3px;text-align:center;cursor:pointer;font-size:10px;font-weight:500;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap;}
+.tab.on{color:var(--orange);border-bottom-color:var(--orange);}
+.tab .ico{font-size:15px;display:block;margin-bottom:2px;}
+
+.page{display:none;padding:14px;}
+.page.on{display:block;}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#3a1500,#1a0500);border:1px solid var(--border);border-radius:var(--radius);padding:18px 16px;margin-bottom:14px;text-align:center;}
+.hero-logo{width:86px;height:86px;border-radius:50%;border:3px solid var(--orange);margin:0 auto 10px;object-fit:cover;background:#fff;display:block;}
+.hero h1{font-size:19px;font-weight:700;color:var(--orange);margin-bottom:3px;}
+.hero-store{font-size:13px;font-weight:600;color:var(--amber);margin-bottom:4px;}
+.hero p{font-size:12px;color:var(--muted);line-height:1.7;}
+.hero-note{margin-top:10px;background:#2a1000;border:1px solid var(--amber);border-radius:8px;padding:8px 12px;font-size:11px;color:var(--amber);line-height:1.6;}
+
+/* STORY */
+.story-card{background:var(--card);border-left:4px solid var(--amber);border-radius:var(--radius);padding:13px 15px;margin-bottom:11px;}
+.story-card h3{font-size:13px;font-weight:700;color:var(--amber);margin-bottom:5px;}
+.story-card p{font-size:13px;color:var(--cream);line-height:1.7;}
+
+/* SHOP */
+.sec-hd{margin-bottom:12px;}
+.sec-hd h2{font-size:17px;font-weight:700;color:var(--orange);margin-bottom:3px;}
+.sec-hd p{font-size:12px;color:var(--muted);}
+.shop-card{background:var(--card);border:2px solid var(--orange);border-radius:var(--radius);padding:14px 15px;margin-bottom:14px;}
+.shop-card-header{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.shop-card-logo{width:48px;height:48px;border-radius:50%;border:2px solid var(--orange);object-fit:cover;background:#fff;flex-shrink:0;}
+.shop-card-title{font-size:14px;font-weight:700;color:var(--orange);}
+.shop-card-sub{font-size:11px;color:var(--muted);}
+.shop-row{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;font-size:12px;color:var(--cream);line-height:1.5;}
+.shop-row .si{font-size:14px;flex-shrink:0;margin-top:1px;}
+.shop-row a{color:var(--amber);text-decoration:none;}
+.shop-row a:hover{text-decoration:underline;}
+.hours-grid{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:11px;color:var(--muted);}
+.hours-grid .day{color:var(--cream);}
+.hours-grid .closed{color:#e07070;}
+.ig-btn{display:flex;align-items:center;justify-content:center;gap:7px;background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);color:#fff;font-size:12px;font-weight:600;padding:9px 14px;border-radius:8px;text-decoration:none;margin-top:6px;}
+.map-wrap{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:14px;}
+.map-wrap iframe{width:100%;height:220px;border:none;display:block;}
+.map-btn{display:flex;align-items:center;justify-content:center;gap:6px;background:var(--blue);color:#fff;font-size:12px;font-weight:600;padding:10px;text-decoration:none;font-family:inherit;cursor:pointer;border:none;width:100%;}
+
+/* TAKEOUT BOX */
+.takeout-box{background:#1a2a00;border:2px solid var(--green);border-radius:var(--radius);padding:13px 15px;margin-bottom:11px;}
+.takeout-box h3{font-size:13px;font-weight:700;color:var(--green);margin-bottom:8px;}
+.takeout-box p{font-size:12px;color:var(--cream);line-height:1.7;}
+.takeout-box .tb-row{display:flex;gap:8px;margin-top:7px;font-size:12px;align-items:flex-start;}
+.takeout-box .tb-ico{flex-shrink:0;}
+
+/* MENU */
+.filter-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px;}
+.fbtn2{padding:4px 11px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);font-size:11px;cursor:pointer;font-family:inherit;}
+.fbtn2.on{background:var(--orange);border-color:var(--orange);color:#fff;}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;}
+.menu-item{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.mi-img-wrap{width:100%;height:130px;background:var(--surface);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.mi-img-wrap img{width:100%;height:100%;object-fit:cover;}
+.mi-img-wrap .mi-emoji-fb{font-size:52px;}
+.mi-img-wrap .must-badge{position:absolute;top:8px;right:8px;background:var(--orange);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;}
+.mi-img-wrap .pop-badge{position:absolute;top:8px;left:8px;background:#c03020;color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;}
+.mi-body{padding:12px;}
+.mi-top{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.mi-num{width:26px;height:26px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--amber);font-weight:700;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.mi-name{font-size:13px;font-weight:600;color:var(--white);}
+.mi-jp{font-size:11px;color:var(--muted);}
+.mi-desc{font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:7px;}
+.mi-tags{display:flex;gap:3px;flex-wrap:wrap;}
+.tag{font-size:10px;padding:2px 6px;border-radius:10px;font-weight:500;}
+.tag-fish{background:#1a3a5a;color:#70b0e0;}
+.tag-meat{background:#3a1a1a;color:#e07070;}
+.tag-veg{background:#1a3a1a;color:#70c070;}
+.tag-must{background:var(--orange);color:#fff;}
+.allergy-row{display:flex;gap:3px;margin-top:7px;flex-wrap:wrap;}
+.alg{font-size:9px;padding:1px 5px;border-radius:4px;border:1px solid var(--border);color:var(--muted);}
+.alg.contains{background:#3a0a0a;border-color:#c03020;color:#e07070;}
+
+/* HOW TO */
+.divider{border:none;border-top:1px solid var(--border);margin:13px 0;}
+.step{display:flex;gap:11px;margin-bottom:14px;align-items:flex-start;}
+.step-num{width:32px;height:32px;border-radius:50%;background:var(--orange);color:#fff;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.step-body h3{font-size:13px;font-weight:600;color:var(--white);margin-bottom:3px;}
+.step-body p{font-size:12px;color:var(--muted);line-height:1.6;}
+.tip-box{background:var(--card);border:1px solid var(--amber);border-radius:var(--radius);padding:11px 13px;margin-bottom:9px;}
+.tip-box p{font-size:12px;color:var(--cream);line-height:1.6;}
+
+/* CULTURE */
+.cul-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:13px 15px;margin-bottom:11px;}
+.cul-card h3{font-size:13px;font-weight:700;color:var(--amber);margin-bottom:7px;}
+.cul-card p{font-size:12px;color:var(--cream);line-height:1.7;}
+.cul-card .sub{font-size:10px;color:var(--muted);margin-top:6px;padding-top:6px;border-top:1px solid var(--border);}
+
+/* PHRASES */
+.phrase-grid{display:grid;gap:9px;}
+.phrase-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;}
+.phrase-jp{font-size:17px;font-weight:700;color:var(--orange);margin-bottom:1px;}
+.phrase-rom{font-size:11px;color:var(--amber);margin-bottom:4px;}
+.phrase-tr{font-size:13px;color:var(--cream);}
+
+/* FEEDBACK */
+.fb-section{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:13px;margin-bottom:11px;}
+.fb-section h3{font-size:13px;font-weight:700;color:var(--orange);margin-bottom:9px;}
+.fb-label{font-size:12px;color:var(--muted);margin-bottom:4px;display:block;}
+.star-row{display:flex;gap:5px;margin-bottom:11px;}
+.star{font-size:22px;cursor:pointer;opacity:.3;transition:opacity .15s;}
+.star.on{opacity:1;}
+textarea,select,input[type=text]{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px;color:var(--cream);font-family:inherit;font-size:13px;outline:none;margin-bottom:9px;}
+textarea:focus,select:focus,input[type=text]:focus{border-color:var(--orange);}
+textarea{resize:vertical;min-height:76px;}
+.checkbox-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
+.checkbox-row input[type=checkbox]{width:15px;height:15px;accent-color:var(--orange);}
+.checkbox-row label{font-size:12px;color:var(--cream);}
+.submit-btn{width:100%;padding:11px;border-radius:var(--radius);border:none;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px;font-family:inherit;background:var(--green);color:#fff;}
+.fb-success{background:#1a3a1a;border:1px solid var(--green);border-radius:var(--radius);padding:16px;text-align:center;display:none;}
+.fb-success.on{display:block;}
+.fb-success .ico{font-size:30px;margin-bottom:6px;}
+.fb-success p{font-size:13px;color:var(--green);}
+
+/* FOOTER */
+.footer-strip{display:flex;align-items:center;justify-content:center;gap:10px;padding:14px;border-top:1px solid var(--border);margin-top:6px;}
+.footer-strip img{width:34px;height:34px;border-radius:50%;border:2px solid var(--border);background:#fff;object-fit:cover;}
+.footer-strip-text{font-size:10px;color:var(--muted);line-height:1.5;}
+.footer-strip-text strong{color:var(--amber);font-size:11px;}
+
+.toaster{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:9px 18px;border-radius:20px;font-size:13px;font-weight:600;display:none;z-index:999;}
+.toaster.on{display:block;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo-area">
+    <img class="logo-img" id="topbar-logo" src="https://raw.githubusercontent.com/pianggong-gif/shizuoka_oden_app/main/public/jingdahanshiyan02.PNG" alt="漢使研" onerror="this.style.display='none'">
+    <div class="logo-text">静岡おでん おがわ<span id="logo-sub">Shizuoka Oden Guide</span></div>
+  </div>
+  <div class="lang-sel">
+    <button class="lbtn on" onclick="setLang('en')">EN</button>
+    <button class="lbtn" onclick="setLang('zh')">中文</button>
+    <button class="lbtn" onclick="setLang('vi')">VI</button>
+    <button class="lbtn" onclick="setLang('th')">TH</button>
+    <button class="lbtn" onclick="setLang('id')">ID</button>
+    <button class="lbtn" onclick="setLang('ko')">KO</button>
+    <button class="lbtn" onclick="setLang('my')">MY</button>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab on" onclick="goTab('home')"><span class="ico">🏠</span><span data-key="tab_home">Home</span></div>
+  <div class="tab" onclick="goTab('shop')"><span class="ico">📍</span><span data-key="tab_shop">Shop</span></div>
+  <div class="tab" onclick="goTab('menu')"><span class="ico">🍢</span><span data-key="tab_menu">Menu</span></div>
+  <div class="tab" onclick="goTab('howto')"><span class="ico">📖</span><span data-key="tab_howto">How to</span></div>
+  <div class="tab" onclick="goTab('culture')"><span class="ico">🎌</span><span data-key="tab_culture">Culture</span></div>
+  <div class="tab" onclick="goTab('phrases')"><span class="ico">💬</span><span data-key="tab_phrases">Phrases</span></div>
+  <div class="tab" onclick="goTab('feedback')"><span class="ico">📝</span><span data-key="tab_fb">Feedback</span></div>
+</div>
+
+<!-- HOME -->
+<div class="page on" id="pg-home">
+  <div class="hero">
+    <img class="hero-logo" src="https://raw.githubusercontent.com/pianggong-gif/shizuoka_oden_app/main/public/jingdahanshiyan02.PNG" alt="漢使研" onerror="this.style.fontSize='52px';this.outerHTML='<div style=\'font-size:52px;margin-bottom:8px\'>🍢</div>'">
+    <div class="hero-store">静岡おでん おがわ｜昭和23年創業</div>
+    <h1 data-key="home_title">Shizuoka Oden / 関東煮</h1>
+    <p data-key="home_sub">The soul food of Shizuoka — black broth, skewered ingredients, dashi powder & aonori. A one-of-a-kind experience since 1948!</p>
+    <div class="hero-note" data-key="home_note">📌 This guide is for your reference & enjoyment — to help you understand and appreciate what you are eating.</div>
+  </div>
+  <div class="story-card">
+    <h3 data-key="s1t">What is Shizuoka Oden / 関東煮 (かんとだき)?</h3>
+    <p data-key="s1b">In Shizuoka, oden is also called <strong>関東煮（かんとだき）</strong>. The dish features a rich dark broth from beef tendon and pork offal, topped daily via <em>tsugi-tashi</em> (継ぎ足し). Despite the deep color, the flavor is surprisingly mild. Every skewer is finished with dashi powder and aonori.</p>
+  </div>
+  <div class="story-card">
+    <h3 data-key="s2t">おがわ — Since 1948</h3>
+    <p data-key="s2b">Founded in Showa 23 (1948), おがわ has passed down its traditional taste for generations. About <strong>17 kinds of ingredients</strong> are available, including the famous <em>kuro hanpen</em> from Yaizu. The potatoes (じゃがいも) are a specialty item — sourced from <strong>Imagane, Hokkaido</strong>. Every skewer tells a story of dedication and love for Shizuoka's food culture.</p>
+  </div>
+  <div class="story-card">
+    <h3 data-key="s3t">3 Defining Characteristics 🌟</h3>
+    <p data-key="s3b">① <strong>Black broth</strong> — dark soy-based, daily replenished, surprisingly light<br>② <strong>Kuro Hanpen (黒はんぺん)</strong> — black fish cake unique to Shizuoka / Yaizu<br>③ <strong>Dashi powder + Aonori</strong> — sprinkled on top, the essential finishing touch — never skip!</p>
+  </div>
+  <div class="footer-strip">
+    <img src="https://raw.githubusercontent.com/pianggong-gif/shizuoka_oden_app/main/public/jingdahanshiyan02.PNG" alt="漢使研" onerror="this.style.display='none'">
+    <div class="footer-strip-text"><strong>漢使研</strong> — Shizuoka University<br>Han Shi Yan</div>
+  </div>
+</div>
+
+<!-- SHOP -->
+<div class="page" id="pg-shop">
+  <div class="sec-hd"><h2 data-key="shop_title">Shop Info</h2><p>静岡おでん おがわ</p></div>
+  <div class="shop-card">
+    <div class="shop-card-header">
+      <img class="shop-card-logo" src="https://raw.githubusercontent.com/pianggong-gif/shizuoka_oden_app/main/public/jingdahanshiyan02.PNG" alt="漢使研" onerror="this.style.display='none'">
+      <div>
+        <div class="shop-card-title">静岡おでん おがわ</div>
+        <div class="shop-card-sub" data-key="shop_since">Est. Showa 23 (1948) · 昭和23年創業</div>
+      </div>
+    </div>
+    <div class="shop-row"><span class="si">📍</span><span>静岡県静岡市葵区馬場町38番地<br>38 Babancho, Aoi Ward, Shizuoka</span></div>
+    <div class="shop-row"><span class="si">📞</span><span><a href="tel:0542522548">054-252-2548</a></span></div>
+    <div class="shop-row"><span class="si">🕐</span>
+      <div class="hours-grid">
+        <span class="day" data-key="mon">Mon</span><span>10:00 – 17:00</span>
+        <span class="day" data-key="tue">Tue</span><span>10:00 – 17:00</span>
+        <span class="day" data-key="wed">Wed</span><span class="closed" data-key="closed">Closed ／ 定休日</span>
+        <span class="day" data-key="thu">Thu</span><span>10:00 – 17:00</span>
+        <span class="day" data-key="fri">Fri</span><span>10:00 – 17:00</span>
+        <span class="day" data-key="sat">Sat</span><span>10:00 – 17:00</span>
+        <span class="day" data-key="sun">Sun</span><span>10:00 – 17:00</span>
+      </div>
+    </div>
+    <a class="ig-btn" href="https://www.instagram.com/ogawaoden" target="_blank">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      @ogawaoden
+    </a>
+  </div>
+
+  <div class="map-wrap">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d812.6!2d138.3780843!3d34.9791058!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x601a4a22989de7fd%3A0x3d63849dacd9a020!2z6Z2S5bKh44GK44Gn44KT44GK44GM44KP!5e0!3m2!1sen!2sjp!4v1700000000000" allowfullscreen loading="lazy"></iframe>
+    <a class="map-btn" href="https://maps.google.com/?q=34.9791058,138.3780843" target="_blank">🗺️ <span data-key="open_maps">Open in Google Maps</span></a>
+  </div>
+
+  <!-- TAKEOUT -->
+  <div class="takeout-box">
+    <h3>🥡 <span data-key="takeout_title">Takeout / お持ち帰り</span></h3>
+    <p data-key="takeout_body">おがわ offers takeout! You can take home your favourite skewers wrapped to go. Locals often bring their own pot (鍋) to fill up — a beloved Shizuoka tradition. Ask the staff: <strong>「持ち帰りできますか？」</strong> (Mochikaeridekimasu ka? — Can I take this home?)</p>
+    <div class="tb-row"><span class="tb-ico">🍱</span><span data-key="takeout_pack">Skewers are wrapped individually — great as a souvenir or snack on the go.</span></div>
+    <div class="tb-row"><span class="tb-ico">🍲</span><span data-key="takeout_pot">Bring your own pot and take home a full serving of hot oden — a true local custom!</span></div>
+    <div class="tb-row"><span class="tb-ico">⏰</span><span data-key="takeout_time">Available during shop hours. Quantity may be limited — come early!</span></div>
+  </div>
+
+  <div class="story-card">
+    <h3 data-key="access_title">Access / Getting There</h3>
+    <p data-key="access_body">Located on <strong>Sengen-dori</strong>, near Shizuoka-Sengen Shrine (浅間神社). A short walk from Shin-Shizuoka Station (新静岡駅) on the Shizutetsu Line. Look for the orange lanterns and the warm smell of simmering broth!</p>
+  </div>
+  <div class="footer-strip">
+    <img src="https://raw.githubusercontent.com/pianggong-gif/shizuoka_oden_app/main/public/jingdahanshiyan02.PNG" alt="漢使研" onerror="this.style.display='none'">
+    <div class="footer-strip-text"><strong>漢使研</strong> — Shizuoka University · Han Shi Yan</div>
+  </div>
+</div>
+
+<!-- MENU -->
+<div class="page" id="pg-menu">
+  <div class="sec-hd"><h2 data-key="menu_title">Ingredient Guide 🍢</h2><p data-key="menu_sub">~17 kinds of ingredients. Learn about each one!</p></div>
+  <div class="filter-row">
+    <button class="fbtn2 on" onclick="filterMenu('all',this)" data-key="f_all">All</button>
+    <button class="fbtn2" onclick="filterMenu('must',this)" data-key="f_must">⭐ Must Try</button>
+    <button class="fbtn2" onclick="filterMenu('fish',this)" data-key="f_fish">🐟 Fish</button>
+    <button class="fbtn2" onclick="filterMenu('meat',this)" data-key="f_meat">🥩 Meat</button>
+    <button class="fbtn2" onclick="filterMenu('veg',this)" data-key="f_veg">🥦 Plant-based</button>
+  </div>
+  <div class="menu-grid" id="menu-grid"></div>
+</div>
+
+<!-- HOW TO -->
+<div class="page" id="pg-howto">
+  <div class="sec-hd"><h2 data-key="howto_title">How to Enjoy 関東煮</h2><p data-key="howto_sub">Follow these steps for the full authentic experience.</p></div>
+  <div id="steps-container"></div>
+  <hr class="divider">
+  <div class="sec-hd"><h2 data-key="tips_title">💡 Tips & Etiquette</h2></div>
+  <div id="tips-container"></div>
+</div>
+
+<!-- CULTURE -->
+<div class="page" id="pg-culture">
+  <div class="sec-hd"><h2 data-key="cul_title">Culture & Background</h2><p data-key="cul_sub">Understanding the culture makes the meal richer.</p></div>
+  <div id="culture-container"></div>
+</div>
+
+<!-- PHRASES -->
+<div class="page" id="pg-phrases">
+  <div class="sec-hd"><h2 data-key="phr_title">Useful Phrases</h2><p data-key="phr_sub">Communicate naturally with these simple phrases.</p></div>
+  <div class="phrase-grid" id="phrase-grid"></div>
+</div>
+
+<!-- FEEDBACK -->
+<div class="page" id="pg-feedback">
+  <div class="sec-hd"><h2 data-key="fb_title">Your Feedback</h2><p data-key="fb_sub">Help the 漢使研 team improve this guide. Thank you!</p></div>
+  <div class="fb-section">
+    <h3 data-key="fb_sec1">1. Overall Experience</h3>
+    <label class="fb-label" data-key="fb_q_taste">How was the taste of Shizuoka Oden / 関東煮?</label>
+    <div class="star-row" id="stars-taste"><span class="star" onclick="setStar('taste',1)">⭐</span><span class="star" onclick="setStar('taste',2)">⭐</span><span class="star" onclick="setStar('taste',3)">⭐</span><span class="star" onclick="setStar('taste',4)">⭐</span><span class="star" onclick="setStar('taste',5)">⭐</span></div>
+    <label class="fb-label" data-key="fb_q_guide">How useful was this guide?</label>
+    <div class="star-row" id="stars-guide"><span class="star" onclick="setStar('guide',1)">⭐</span><span class="star" onclick="setStar('guide',2)">⭐</span><span class="star" onclick="setStar('guide',3)">⭐</span><span class="star" onclick="setStar('guide',4)">⭐</span><span class="star" onclick="setStar('guide',5)">⭐</span></div>
+    <label class="fb-label" data-key="fb_q_culture">Did the cultural info deepen your enjoyment?</label>
+    <div class="star-row" id="stars-culture"><span class="star" onclick="setStar('culture',1)">⭐</span><span class="star" onclick="setStar('culture',2)">⭐</span><span class="star" onclick="setStar('culture',3)">⭐</span><span class="star" onclick="setStar('culture',4)">⭐</span><span class="star" onclick="setStar('culture',5)">⭐</span></div>
+  </div>
+  <div class="fb-section">
+    <h3 data-key="fb_sec2">2. Language & Translation</h3>
+    <label class="fb-label" data-key="fb_lang_used">Which language did you use?</label>
+    <select id="fb-lang-used">
+      <option value="">— Select —</option>
+      <option value="en">English</option><option value="zh">中文</option><option value="vi">Tiếng Việt</option>
+      <option value="th">ภาษาไทย</option><option value="id">Bahasa Indonesia</option>
+      <option value="ko">한국어</option><option value="my">မြန်မာဘာသာ</option><option value="other">Other</option>
+    </select>
+    <label class="fb-label" data-key="fb_lang_clear">Was the translation clear and accurate?</label>
+    <div class="star-row" id="stars-lang"><span class="star" onclick="setStar('lang',1)">⭐</span><span class="star" onclick="setStar('lang',2)">⭐</span><span class="star" onclick="setStar('lang',3)">⭐</span><span class="star" onclick="setStar('lang',4)">⭐</span><span class="star" onclick="setStar('lang',5)">⭐</span></div>
+    <label class="fb-label" data-key="fb_add_lang">Any language you would like added?</label>
+    <input type="text" id="fb-add-lang" placeholder="e.g. French, Arabic…">
+  </div>
+  <div class="fb-section">
+    <h3 data-key="fb_sec3">3. Content</h3>
+    <label class="fb-label" data-key="fb_missing">What was missing or unclear?</label>
+    <div class="checkbox-row"><input type="checkbox" id="fb-m1"><label for="fb-m1" data-key="fb_m1">More ingredient details</label></div>
+    <div class="checkbox-row"><input type="checkbox" id="fb-m2"><label for="fb-m2" data-key="fb_m2">Allergen / dietary info</label></div>
+    <div class="checkbox-row"><input type="checkbox" id="fb-m3"><label for="fb-m3" data-key="fb_m3">How-to-eat instructions</label></div>
+    <div class="checkbox-row"><input type="checkbox" id="fb-m4"><label for="fb-m4" data-key="fb_m4">History & cultural depth</label></div>
+    <div class="checkbox-row"><input type="checkbox" id="fb-m5"><label for="fb-m5" data-key="fb_m5">Photos of dishes</label></div>
+    <div class="checkbox-row"><input type="checkbox" id="fb-m6"><label for="fb-m6" data-key="fb_m6">Takeout information</label></div>
+  </div>
+  <div class="fb-section">
+    <h3 data-key="fb_sec4">4. Free Comments</h3>
+    <label class="fb-label" data-key="fb_free_q">Any suggestions, impressions, or requests?</label>
+    <textarea id="fb-free" rows="4"></textarea>
+    <label class="fb-label" data-key="fb_country_q">Your country of origin (optional)</label>
+    <input type="text" id="fb-country" placeholder="e.g. China, Vietnam, USA…">
+  </div>
+  <button class="submit-btn" onclick="submitFeedback()" data-key="btn_submit">Submit Feedback ✓</button>
+  <div class="fb-success" id="fb-success">
+    <div class="ico">🙏</div>
+    <p data-key="fb_thanks">Thank you! Your feedback helps the 漢使研 team improve this guide.</p>
+    <p style="font-size:11px;color:var(--muted);margin-top:5px;">漢使研が確認します。ありがとうございます！</p>
+  </div>
+  <div class="footer-strip" style="margin-top:16px;">
+    <img src="https://raw.githubusercontent.com/pianggong-gif/shizuoka_oden_app/main/public/jingdahanshiyan02.PNG" alt="漢使研" onerror="this.style.display='none'">
+    <div class="footer-strip-text"><strong>漢使研</strong> — Shizuoka University · Han Shi Yan</div>
+  </div>
+</div>
+
+<div class="toaster" id="toaster"></div>
+
+<script>
+const LOGO = "https://raw.githubusercontent.com/pianggong-gif/shizuoka_oden_app/main/public/jingdahanshiyan02.PNG";
+
+// Food photo URLs — using Wikimedia Commons / public domain images as placeholders
+// Each item uses a real photo of the actual ingredient
+const PHOTOS = {
+  kurohanpen: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Shizuoka_oden_kuro_hanpen.jpg/320px-Shizuoka_oden_kuro_hanpen.jpg",
+  gyusuji:    "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Gyusuji_oden.jpg/320px-Gyusuji_oden.jpg",
+  konjac:     "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Konjac_oden.jpg/320px-Konjac_oden.jpg",
+  daikon:     "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Oden_daikon.jpg/320px-Oden_daikon.jpg",
+  tamago:     "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Oden_tamago.jpg/320px-Oden_tamago.jpg",
+  chikuwa:    "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/Chikuwa.jpg/320px-Chikuwa.jpg",
+  satsumaage: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Satsuma-age.jpg/320px-Satsuma-age.jpg",
+  atsuage:    "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Atsuage.jpg/320px-Atsuage.jpg",
+  jagaimo:    "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Oden_potato.jpg/320px-Oden_potato.jpg",
+  motu:       "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/Pork_offal.jpg/320px-Pork_offal.jpg",
+  shirataki:  "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Shirataki_noodles.jpg/320px-Shirataki_noodles.jpg",
+  goboten:    "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Gobou_tempura.jpg/320px-Gobou_tempura.jpg",
+};
+
+const LANGS = {
+  en:{
+    tab_home:"Home",tab_shop:"Shop",tab_menu:"Menu",tab_howto:"How to",tab_culture:"Culture",tab_phrases:"Phrases",tab_fb:"Feedback",
+    logo_sub:"Shizuoka Oden Guide",
+    home_title:"Shizuoka Oden / 関東煮",
+    home_sub:"The soul food of Shizuoka — black broth, skewered ingredients, dashi powder & aonori. A one-of-a-kind experience since 1948!",
+    home_note:"📌 This guide is for your reference & enjoyment — to help you understand and appreciate what you are eating.",
+    s1t:"What is Shizuoka Oden / 関東煮 (かんとだき)?",
+    s1b:"In Shizuoka, oden is also called <strong>関東煮（かんとだき）</strong>. The dish features a rich dark broth from beef tendon and pork offal, topped daily via <em>tsugi-tashi</em> (継ぎ足し). Despite the deep color, the flavor is surprisingly mild. Every skewer is finished with dashi powder and aonori.",
+    s2t:"おがわ — Since 1948",
+    s2b:"Founded in Showa 23 (1948), おがわ has passed down its traditional taste for generations. About <strong>17 kinds of ingredients</strong>, including the famous kuro hanpen from Yaizu. The potatoes are sourced from <strong>Imagane, Hokkaido</strong> — a mark of quality and dedication.",
+    s3t:"3 Defining Characteristics 🌟",
+    s3b:"① <strong>Black broth</strong> — dark soy-based, daily replenished, surprisingly light<br>② <strong>Kuro Hanpen (黒はんぺん)</strong> — black fish cake unique to Shizuoka<br>③ <strong>Dashi powder + Aonori</strong> — sprinkled on top, the essential finishing touch!",
+    shop_title:"Shop Info",shop_since:"Est. Showa 23 (1948) · 昭和23年創業",
+    mon:"Mon",tue:"Tue",wed:"Wed",thu:"Thu",fri:"Fri",sat:"Sat",sun:"Sun",closed:"Closed ／ 定休日",
+    open_maps:"Open in Google Maps",
+    takeout_title:"Takeout / お持ち帰り",
+    takeout_body:"おがわ offers takeout! Take home your favourite skewers. Locals often bring their own pot (鍋) to fill up — a beloved Shizuoka tradition. Ask the staff: <strong>「持ち帰りできますか？」</strong>",
+    takeout_pack:"Skewers are wrapped individually — great as a souvenir or snack on the go.",
+    takeout_pot:"Bring your own pot and take home hot oden — a true local custom!",
+    takeout_time:"Available during shop hours. Come early as some items may sell out!",
+    access_title:"Access / Getting There",
+    access_body:"Located on <strong>Sengen-dori</strong>, near Shizuoka-Sengen Shrine (浅間神社). Short walk from Shin-Shizuoka Station (新静岡駅). Look for the orange lanterns!",
+    menu_title:"Ingredient Guide 🍢",menu_sub:"~17 kinds of ingredients. Learn about each one!",
+    f_all:"All",f_must:"⭐ Must Try",f_fish:"🐟 Fish",f_meat:"🥩 Meat",f_veg:"🥦 Plant-based",
+    howto_title:"How to Enjoy 関東煮",howto_sub:"Follow these steps for the full authentic experience.",
+    tips_title:"💡 Tips & Etiquette",
+    cul_title:"Culture & Background",cul_sub:"Understanding the culture makes the meal richer.",
+    phr_title:"Useful Phrases",phr_sub:"Communicate naturally with these simple phrases.",
+    fb_title:"Your Feedback",fb_sub:"Help the 漢使研 team improve this guide. Thank you!",
+    fb_sec1:"1. Overall Experience",fb_q_taste:"How was the taste of Shizuoka Oden / 関東煮?",fb_q_guide:"How useful was this guide?",fb_q_culture:"Did the cultural info deepen your enjoyment?",
+    fb_sec2:"2. Language & Translation",fb_lang_used:"Which language did you use?",fb_lang_clear:"Was the translation clear?",fb_add_lang:"Any language you would like added?",
+    fb_sec3:"3. Content",fb_missing:"What was missing or unclear?",
+    fb_m1:"More ingredient details",fb_m2:"Allergen / dietary info",fb_m3:"How-to-eat instructions",fb_m4:"History & cultural depth",fb_m5:"Photos of dishes",fb_m6:"Takeout information",
+    fb_sec4:"4. Free Comments",fb_free_q:"Any suggestions, impressions, or requests?",fb_country_q:"Your country of origin (optional)",
+    btn_submit:"Submit Feedback ✓",fb_thanks:"Thank you! Your feedback helps the 漢使研 team improve this guide.",
+    toast_fb:"Feedback submitted! 🙏",
+  },
+  zh:{
+    tab_home:"首页",tab_shop:"店铺",tab_menu:"食材",tab_howto:"食用方法",tab_culture:"文化",tab_phrases:"常用语",tab_fb:"反馈",
+    logo_sub:"静冈关东煮参考指南",
+    home_title:"静冈关东煮",
+    home_sub:"静冈的灵魂美食——黑色汤底、串烧食材、鱼粉与青海苔。自1948年以来的独特体验！",
+    home_note:"📌 本小程序仅供参考，帮助您了解和深度享受关东煮，不用于点单。",
+    s1t:"什么是「关东煮（かんとだき）」？",
+    s1b:"在静冈，关东煮也叫<strong>关東煮（かんとだき）</strong>。汤底以牛筋和猪杂熬制，每天通过「継ぎ足し」法不断补充。颜色虽深，入口却清爽鲜美。每串食材上都会撒上鱼粉和青海苔。",
+    s2t:"おがわ——1948年创业",
+    s2b:"昭和23年（1948年）创业，代代相传，守护传统风味。约有<strong>17种食材</strong>，其中以焼津特产黑酣片最为著名。土豆更是特别讲究，选用<strong>北海道今金产</strong>。",
+    s3t:"三大标志性特点 🌟",
+    s3b:"① <strong>黑色汤底</strong>——深色酱油汤底，每日补充，入口清爽<br>② <strong>黑酣片</strong>——静冈独有，整条鲭鱼/沙丁鱼连骨带皮制成<br>③ <strong>鱼粉＋青海苔</strong>——撒在食材上，不可省略的画龙点睛",
+    shop_title:"店铺信息",shop_since:"创业于昭和23年（1948年）",
+    mon:"周一",tue:"周二",wed:"周三",thu:"周四",fri:"周五",sat:"周六",sun:"周日",closed:"休息",
+    open_maps:"在Google地图中打开",
+    takeout_title:"外带 / お持ち帰り",
+    takeout_body:"おがわ提供外带服务！可以将喜欢的串带走。当地居民常常自带锅子来打包关东煮——这是静冈的美好传统。可以问店员：<strong>「持ち帰りできますか？」</strong>（能带走吗？）",
+    takeout_pack:"串烧单独包装，适合边走边吃或作为伴手礼。",
+    takeout_pot:"自带锅子打包热腾腾的关东煮，体验地道的静冈生活！",
+    takeout_time:"营业时间内均可外带，部分食材售完即止，建议早到！",
+    access_title:"交通指南",
+    access_body:"位于<strong>浅间通（Sengen-dori）</strong>，靠近静冈浅间神社。从静铁新静冈站（新静岡駅）步行即可到达。找寻橙色灯笼！",
+    menu_title:"食材图鉴 🍢",menu_sub:"约17种食材，了解每种食材的特点！",
+    f_all:"全部",f_must:"⭐ 必尝",f_fish:"🐟 鱼类",f_meat:"🥩 肉类",f_veg:"🥦 素食",
+    howto_title:"如何享用关东煮",howto_sub:"按照以下步骤，获得最地道的体验。",
+    tips_title:"💡 小贴士与礼仪",
+    cul_title:"文化与背景",cul_sub:"了解饮食文化，让这顿饭更有滋味。",
+    phr_title:"店内常用语",phr_sub:"这些表达能让您与店家沟通更顺畅。",
+    fb_title:"您的反馈",fb_sub:"您的意见将帮助漢使研团队完善本指南，感谢！",
+    fb_sec1:"1. 总体体验",fb_q_taste:"静冈关东煮的味道如何？",fb_q_guide:"本指南对您有多大帮助？",fb_q_culture:"文化介绍有没有加深您的享受？",
+    fb_sec2:"2. 语言与翻译",fb_lang_used:"您使用了哪种语言版本？",fb_lang_clear:"翻译是否清晰准确？",fb_add_lang:"您希望增加哪种语言？",
+    fb_sec3:"3. 内容评价",fb_missing:"哪些内容缺失或不够清楚？",
+    fb_m1:"食材详情",fb_m2:"过敏/饮食信息",fb_m3:"食用方法说明",fb_m4:"历史与文化深度",fb_m5:"菜品照片",fb_m6:"外带信息",
+    fb_sec4:"4. 自由留言",fb_free_q:"其他建议、感想或需求？",fb_country_q:"您来自哪个国家？（可选）",
+    btn_submit:"提交反馈 ✓",fb_thanks:"感谢您的反馈！漢使研将持续完善本指南。",
+    toast_fb:"反馈已提交！🙏",
+  },
+  vi:{
+    tab_home:"Trang chủ",tab_shop:"Cửa hàng",tab_menu:"Thực đơn",tab_howto:"Cách thưởng thức",tab_culture:"Văn hóa",tab_phrases:"Hội thoại",tab_fb:"Phản hồi",
+    logo_sub:"Hướng dẫn Oden Shizuoka",
+    home_title:"Oden Shizuoka / 関東煮",
+    home_sub:"Món ăn tâm hồn của Shizuoka từ năm 1948 — nước dùng đen, xiên que, bột dashi và rong biển!",
+    home_note:"📌 Ứng dụng này chỉ để tham khảo, giúp bạn hiểu và thưởng thức món ăn sâu hơn.",
+    s1t:"Oden / 関東煮 (かんとだき) là gì?",s1b:"Ở Shizuoka, oden còn gọi là <strong>関東煮（かんとだき）</strong>. Nước dùng đen từ gân bò và lòng heo, bổ sung hàng ngày. Màu đậm nhưng vị thanh. Mỗi xiên rắc bột dashi và rong biển.",
+    s2t:"おがわ — Từ năm 1948",s2b:"Sáng lập năm 1948, おがわ giữ gìn hương vị truyền thống qua nhiều thế hệ. Khoảng <strong>17 loại nguyên liệu</strong>. Khoai tây từ <strong>Imagane, Hokkaido</strong>.",
+    s3t:"3 đặc trưng 🌟",s3b:"① <strong>Nước dùng đen</strong> — đậm màu nhưng vị thanh<br>② <strong>Kuro Hanpen (黒はんぺん)</strong> — bánh cá đen đặc sản Shizuoka<br>③ <strong>Bột dashi + Rong biển</strong> — rắc lên trên, không thể bỏ!",
+    shop_title:"Thông tin cửa hàng",shop_since:"Thành lập năm 1948",
+    mon:"T2",tue:"T3",wed:"T4",thu:"T5",fri:"T6",sat:"T7",sun:"CN",closed:"Nghỉ",
+    open_maps:"Mở Google Maps",
+    takeout_title:"Mang về / お持ち帰り",
+    takeout_body:"おがわ có dịch vụ mang về! Bạn có thể mang về những xiên yêu thích. Hỏi nhân viên: <strong>「持ち帰りできますか？」</strong> (Có thể mang về không?)",
+    takeout_pack:"Xiên được gói riêng — tiện mang đi hoặc làm quà.",
+    takeout_pot:"Mang nồi của bạn đến và đong đầy oden nóng hổi — phong tục địa phương!",
+    takeout_time:"Có trong giờ mở cửa. Nên đến sớm vì có thể hết hàng!",
+    access_title:"Đường đến",access_body:"Tọa lạc trên phố <strong>Sengen-dori</strong> gần đền Shizuoka-Sengen. Đi bộ từ ga Shin-Shizuoka. Tìm đèn lồng cam!",
+    menu_title:"Giới thiệu nguyên liệu 🍢",menu_sub:"~17 loại nguyên liệu. Tìm hiểu từng loại!",
+    f_all:"Tất cả",f_must:"⭐ Phải thử",f_fish:"🐟 Cá",f_meat:"🥩 Thịt",f_veg:"🥦 Thuần chay",
+    howto_title:"Cách thưởng thức 関東煮",howto_sub:"Theo các bước để có trải nghiệm đích thực.",
+    tips_title:"💡 Mẹo & Lịch sự",cul_title:"Văn hóa & Bối cảnh",cul_sub:"Hiểu văn hóa giúp bạn thưởng thức ngon hơn.",
+    phr_title:"Câu hội thoại hữu ích",phr_sub:"Giao tiếp tự nhiên hơn với những câu này.",
+    fb_title:"Phản hồi",fb_sub:"Giúp nhóm 漢使研 cải thiện hướng dẫn. Cảm ơn!",
+    fb_sec1:"1. Trải nghiệm",fb_q_taste:"Oden Shizuoka có ngon không?",fb_q_guide:"Hướng dẫn có hữu ích không?",fb_q_culture:"Văn hóa có giúp thưởng thức sâu hơn không?",
+    fb_sec2:"2. Ngôn ngữ",fb_lang_used:"Bạn dùng ngôn ngữ nào?",fb_lang_clear:"Bản dịch có rõ không?",fb_add_lang:"Muốn thêm ngôn ngữ nào?",
+    fb_sec3:"3. Nội dung",fb_missing:"Thiếu thông tin gì?",
+    fb_m1:"Chi tiết nguyên liệu",fb_m2:"Thông tin dị ứng",fb_m3:"Hướng dẫn cách ăn",fb_m4:"Lịch sử & văn hóa",fb_m5:"Ảnh món ăn",fb_m6:"Thông tin mang về",
+    fb_sec4:"4. Ý kiến",fb_free_q:"Góp ý khác?",fb_country_q:"Bạn đến từ đâu?",
+    btn_submit:"Gửi phản hồi ✓",fb_thanks:"Cảm ơn! Phản hồi của bạn đã được ghi lại.",toast_fb:"Đã gửi! 🙏",
+  },
+  th:{
+    tab_home:"หน้าหลัก",tab_shop:"ร้าน",tab_menu:"เมนู",tab_howto:"วิธีทาน",tab_culture:"วัฒนธรรม",tab_phrases:"สนทนา",tab_fb:"ความคิดเห็น",
+    logo_sub:"คู่มือโอเด้นชิซูโอกะ",
+    home_title:"โอเด้นชิซูโอกะ / 関東煮",
+    home_sub:"อาหารจิตวิญญาณของชิซูโอกะตั้งแต่ปี 1948 — น้ำซุปดำ ไม้เสียบ ผง dashi สาหร่ายเขียว!",
+    home_note:"📌 แอปนี้มีไว้เพื่อการอ้างอิงและเพิ่มความเข้าใจในการเพลิดเพลิน ไม่ใช่สำหรับสั่งอาหาร",
+    s1t:"โอเด้น / 関東煮 (かんとだき) คืออะไร?",s1b:"ในชิซูโอกะโอเด้นเรียกว่า <strong>関東煮（かんとだき）</strong> น้ำซุปดำจากเอ็นวัวและเครื่องใน เติมทุกวัน รสเบา ทุกไม้โรยผง dashi และสาหร่ายเขียว",
+    s2t:"おがわ — ตั้งแต่ปี 1948",s2b:"ก่อตั้งปี 1948 สืบทอดรสชาติดั้งเดิม มีวัตถุดิบ<strong>ประมาณ 17 ชนิด</strong> มันฝรั่งจาก<strong>อิมากาเนะ ฮอกไกโด</strong>",
+    s3t:"3 เอกลักษณ์ 🌟",s3b:"① <strong>น้ำซุปดำ</strong> — เข้มแต่รสเบา<br>② <strong>คุโระฮันเปน</strong> — เค้กปลาดำชิซูโอกะ<br>③ <strong>ผง dashi + สาหร่าย</strong> — โรยบน ขาดไม่ได้!",
+    shop_title:"ข้อมูลร้าน",shop_since:"ก่อตั้งปี 1948",
+    mon:"จ.",tue:"อ.",wed:"พ.",thu:"พฤ.",fri:"ศ.",sat:"ส.",sun:"อา.",closed:"ปิด",
+    open_maps:"เปิด Google Maps",
+    takeout_title:"นำกลับบ้าน / お持ち帰り",
+    takeout_body:"おがわ บริการนำกลับบ้าน ถามพนักงาน: <strong>「持ち帰りできますか？」</strong> (มีบริการนำกลับบ้านไหม?)",
+    takeout_pack:"ห่อแยกรายไม้ เหมาะทานระหว่างเดินทางหรือเป็นของฝาก",
+    takeout_pot:"นำหม้อมาเองเพื่อตักโอเด้นกลับบ้าน — ธรรมเนียมท้องถิ่นที่น่ารัก!",
+    takeout_time:"บริการในช่วงเวลาเปิด บางอย่างอาจหมดเร็ว มาแต่เนิ่นๆ!",
+    access_title:"การเดินทาง",access_body:"อยู่บนถนน <strong>Sengen-dori</strong> ใกล้ศาลเจ้า เดินเท้าจากสถานี Shin-Shizuoka มองหาโคมไฟสีส้ม!",
+    menu_title:"คู่มือวัตถุดิบ 🍢",menu_sub:"~17 ชนิด เรียนรู้แต่ละอย่าง!",
+    f_all:"ทั้งหมด",f_must:"⭐ ต้องลอง",f_fish:"🐟 ปลา",f_meat:"🥩 เนื้อ",f_veg:"🥦 พืช",
+    howto_title:"วิธีเพลิดเพลินกับ関東煮",howto_sub:"ทำตามขั้นตอนสำหรับประสบการณ์ที่แท้จริง",
+    tips_title:"💡 เคล็ดลับ",cul_title:"วัฒนธรรม",cul_sub:"เข้าใจวัฒนธรรมทำให้อร่อยยิ่งขึ้น",
+    phr_title:"ประโยคสนทนา",phr_sub:"สื่อสารอย่างเป็นธรรมชาติ",
+    fb_title:"ความคิดเห็น",fb_sub:"ช่วย漢使研 ปรับปรุงคู่มือ!",
+    fb_sec1:"1. ประสบการณ์",fb_q_taste:"รสชาติเป็นอย่างไร?",fb_q_guide:"คู่มือมีประโยชน์ไหม?",fb_q_culture:"ข้อมูลวัฒนธรรมช่วยไหม?",
+    fb_sec2:"2. ภาษา",fb_lang_used:"ใช้ภาษาอะไร?",fb_lang_clear:"การแปลชัดเจนไหม?",fb_add_lang:"ต้องการเพิ่มภาษาอะไร?",
+    fb_sec3:"3. เนื้อหา",fb_missing:"ข้อมูลอะไรขาดหาย?",
+    fb_m1:"รายละเอียดวัตถุดิบ",fb_m2:"ข้อมูลภูมิแพ้",fb_m3:"วิธีทาน",fb_m4:"ประวัติ/วัฒนธรรม",fb_m5:"รูปอาหาร",fb_m6:"ข้อมูลนำกลับบ้าน",
+    fb_sec4:"4. ความคิดเห็น",fb_free_q:"ข้อเสนอแนะอื่นๆ?",fb_country_q:"ประเทศของคุณ?",
+    btn_submit:"ส่งความคิดเห็น ✓",fb_thanks:"ขอบคุณ!",toast_fb:"ส่งแล้ว! 🙏",
+  },
+  id:{
+    tab_home:"Beranda",tab_shop:"Toko",tab_menu:"Menu",tab_howto:"Cara Makan",tab_culture:"Budaya",tab_phrases:"Kalimat",tab_fb:"Masukan",
+    logo_sub:"Panduan Oden Shizuoka",
+    home_title:"Oden Shizuoka / 関東煮",
+    home_sub:"Makanan jiwa Shizuoka sejak 1948 — kuah hitam, tusukan bahan, bubuk dashi & aonori!",
+    home_note:"📌 Panduan ini hanya untuk referensi dan memperdalam pemahaman, bukan untuk memesan.",
+    s1t:"Oden / 関東煮 (かんとだき) adalah apa?",s1b:"Di Shizuoka, oden disebut <strong>関東煮（かんとだき）</strong>. Kuah hitam dari urat sapi dan jeroan babi, ditambahkan setiap hari. Warna gelap tapi rasa ringan. Setiap tusukan ditaburi bubuk dashi dan aonori.",
+    s2t:"おがわ — Sejak 1948",s2b:"Berdiri tahun 1948, おがわ mewarisi cita rasa tradisional. Sekitar <strong>17 jenis bahan</strong>. Kentang khusus dari <strong>Imagane, Hokkaido</strong>.",
+    s3t:"3 Ciri Khas 🌟",s3b:"① <strong>Kuah hitam</strong> — gelap tapi ringan<br>② <strong>Kuro Hanpen</strong> — kue ikan hitam khas Shizuoka<br>③ <strong>Bubuk dashi + Aonori</strong> — wajib ditaburkan!",
+    shop_title:"Info Toko",shop_since:"Berdiri tahun 1948",
+    mon:"Sen",tue:"Sel",wed:"Rab",thu:"Kam",fri:"Jum",sat:"Sab",sun:"Ming",closed:"Tutup",
+    open_maps:"Buka Google Maps",
+    takeout_title:"Bawa Pulang / お持ち帰り",
+    takeout_body:"おがわ menyediakan layanan bawa pulang! Tanya staf: <strong>「持ち帰りできますか？」</strong> (Bisa dibawa pulang?)",
+    takeout_pack:"Tusukan dikemas satu per satu — cocok dimakan di jalan atau dijadikan oleh-oleh.",
+    takeout_pot:"Bawa panci sendiri untuk oden panas — tradisi lokal yang menyenangkan!",
+    takeout_time:"Tersedia selama jam buka. Datang lebih awal karena stok bisa habis!",
+    access_title:"Cara ke Sana",access_body:"Di Jalan <strong>Sengen-dori</strong>, dekat Kuil Shizuoka-Sengen. Jalan kaki dari Stasiun Shin-Shizuoka. Cari lentera jingga!",
+    menu_title:"Panduan Bahan 🍢",menu_sub:"~17 jenis bahan. Pelajari setiap bahan!",
+    f_all:"Semua",f_must:"⭐ Wajib",f_fish:"🐟 Ikan",f_meat:"🥩 Daging",f_veg:"🥦 Nabati",
+    howto_title:"Cara Menikmati 関東煮",howto_sub:"Ikuti langkah ini untuk pengalaman autentik.",
+    tips_title:"💡 Tips",cul_title:"Budaya",cul_sub:"Memahami budaya membuat makan lebih bermakna.",
+    phr_title:"Kalimat Berguna",phr_sub:"Berkomunikasi lebih alami.",
+    fb_title:"Masukan",fb_sub:"Bantu 漢使研 meningkatkan panduan!",
+    fb_sec1:"1. Pengalaman",fb_q_taste:"Bagaimana rasanya?",fb_q_guide:"Seberapa berguna panduan ini?",fb_q_culture:"Info budaya membantu?",
+    fb_sec2:"2. Bahasa",fb_lang_used:"Bahasa apa yang digunakan?",fb_lang_clear:"Terjemahan jelas?",fb_add_lang:"Bahasa apa yang ingin ditambah?",
+    fb_sec3:"3. Konten",fb_missing:"Informasi apa yang kurang?",
+    fb_m1:"Detail bahan",fb_m2:"Info alergen",fb_m3:"Petunjuk cara makan",fb_m4:"Sejarah & budaya",fb_m5:"Foto makanan",fb_m6:"Info bawa pulang",
+    fb_sec4:"4. Komentar",fb_free_q:"Saran lain?",fb_country_q:"Negara asal?",
+    btn_submit:"Kirim Masukan ✓",fb_thanks:"Terima kasih!",toast_fb:"Terkirim! 🙏",
+  },
+  ko:{
+    tab_home:"홈",tab_shop:"가게",tab_menu:"메뉴",tab_howto:"먹는 법",tab_culture:"문화",tab_phrases:"표현",tab_fb:"피드백",
+    logo_sub:"시즈오카 오뎅 가이드",
+    home_title:"시즈오카 오뎅 / 関東煮",
+    home_sub:"1948년부터 이어온 시즈오카의 소울푸드 — 검은 국물, 꼬치, 다시 파우더와 아오노리!",
+    home_note:"📌 이 가이드는 참고와 이해를 위한 것입니다. 주문용이 아닙니다.",
+    s1t:"오뎅 / 関東煮 (かんとだき)란?",s1b:"시즈오카에서 오뎅은 <strong>関東煮（かんとだき）</strong>라고도 합니다. 검은 국물은 소힘줄과 돼지 내장으로 만들며 매일 쓰기타시로 보충됩니다. 색은 짙지만 맛은 담백합니다.",
+    s2t:"おがわ — 1948년 창업",s2b:"쇼와 23년(1948년) 창업, 대대로 전통의 맛을 이어왔습니다. 약 <strong>17가지 재료</strong>, 감자는 <strong>홋카이도 이마카네산</strong>을 사용합니다.",
+    s3t:"3가지 특징 🌟",s3b:"① <strong>검은 국물</strong> — 짙은 색이지만 담백<br>② <strong>구로 한펜 (黒はんぺん)</strong> — 시즈오카 특산 검은 어묵<br>③ <strong>다시 파우더 + 아오노리</strong> — 필수 토핑!",
+    shop_title:"가게 정보",shop_since:"1948년 창업",
+    mon:"월",tue:"화",wed:"수",thu:"목",fri:"금",sat:"토",sun:"일",closed:"휴무",
+    open_maps:"Google Maps에서 열기",
+    takeout_title:"포장 / お持ち帰り",
+    takeout_body:"おがわ는 포장 서비스를 제공합니다! 직원에게: <strong>「持ち帰りできますか？」</strong> (포장 가능한가요?)",
+    takeout_pack:"꼬치는 개별 포장 — 길거리 간식이나 선물로 딱입니다.",
+    takeout_pot:"냄비를 가져와서 뜨거운 오뎅을 담아가세요 — 진정한 현지 풍습!",
+    takeout_time:"영업시간 중 포장 가능. 품절될 수 있으니 일찍 오세요!",
+    access_title:"오시는 길",access_body:"<strong>Sengen-dori 거리</strong>, 시즈오카-센겐 신사 근처. 신시즈오카역에서 도보. 주황색 등불을 찾으세요!",
+    menu_title:"재료 안내 🍢",menu_sub:"~17가지 재료를 알아보세요!",
+    f_all:"전체",f_must:"⭐ 필수",f_fish:"🐟 생선",f_meat:"🥩 육류",f_veg:"🥦 채식",
+    howto_title:"関東煮 즐기는 법",howto_sub:"이 단계를 따르세요.",
+    tips_title:"💡 팁",cul_title:"문화",cul_sub:"문화를 이해하면 더 맛있습니다.",
+    phr_title:"유용한 표현",phr_sub:"자연스럽게 소통해보세요.",
+    fb_title:"피드백",fb_sub:"漢使研 팀을 도와주세요!",
+    fb_sec1:"1. 경험",fb_q_taste:"오뎅 맛은?",fb_q_guide:"가이드 도움이 됐나요?",fb_q_culture:"문화 정보가 도움됐나요?",
+    fb_sec2:"2. 언어",fb_lang_used:"어떤 언어를?",fb_lang_clear:"번역이 명확했나요?",fb_add_lang:"추가할 언어?",
+    fb_sec3:"3. 콘텐츠",fb_missing:"부족한 정보?",
+    fb_m1:"재료 상세",fb_m2:"알레르기 정보",fb_m3:"먹는 법",fb_m4:"역사/문화",fb_m5:"음식 사진",fb_m6:"포장 정보",
+    fb_sec4:"4. 의견",fb_free_q:"기타 제안?",fb_country_q:"출신 국가?",
+    btn_submit:"피드백 제출 ✓",fb_thanks:"감사합니다!",toast_fb:"제출 완료! 🙏",
+  },
+  my:{
+    tab_home:"မူလ",tab_shop:"ဆိုင်",tab_menu:"မီနူး",tab_howto:"စားနည်း",tab_culture:"ယဉ်ကျေး",tab_phrases:"စကား",tab_fb:"တုံ့ပြန်",
+    logo_sub:"Shizuoka Oden လမ်းညွှန်",
+    home_title:"Shizuoka Oden / 関東煮",
+    home_sub:"1948 ခုမှ ရှိဇူအိုကာ၏ ဝိညာဉ်အစာ — အနက်ဟင်းရည်၊ ဓားသွင်း၊ ဒါရှိမှုန့်!",
+    home_note:"📌 ဤလမ်းညွှန်မှာ ကိုးကားရန်နှင့် နားလည်မှုတိုးမြှင့်ရန်သာ ဖြစ်သည်",
+    s1t:"Oden / 関東煮 (かんとだき) ဆိုတာ?",s1b:"ရှိဇူအိုကာတွင် <strong>関東煮（かんとだき）</strong> ဟုလည်းခေါ်သည်။ အနက်ဟင်းရည်ကို နေ့တိုင်းဖြည့်သည်။ အရောင်မှောင်သော်လည်း အရသာပါးလွှာ",
+    s2t:"おがわ — 1948 ခုနှစ်မှ",s2b:"1948 ခုနှစ်တွင် တည်ထောင်ပြီး မျိုးဆက်များ ဆက်ခံလာသည်။ ပါဝင်ပစ္စည်း<strong>ပေါင်း 17 မျိုး</strong>ခန့်",
+    s3t:"အထူးလက္ခဏာ ၃ ချက် 🌟",s3b:"① <strong>အနက်ဟင်းရည်</strong> — မှောင်သော်လည်း ပါးလွှာ<br>② <strong>ကူရိုဟန်ပင်</strong> — ရှိဇူအိုကာ ငါးကိတ်<br>③ <strong>ဒါရှိမှုန့် + Aonori</strong> — မဖြစ်မနေဖြူးပါ!",
+    shop_title:"ဆိုင်သတင်း",shop_since:"1948 ခုနှစ်တည်ထောင်",
+    mon:"တနင်",tue:"အင်",wed:"ဗုဒ်",thu:"ကြာ",fri:"သောကြာ",sat:"စနေ",sun:"တနင်ဂနွေ",closed:"ပိတ်",
+    open_maps:"Google Maps ဖွင့်",
+    takeout_title:"ယူသွားရန် / お持ち帰り",
+    takeout_body:"おがわ တွင် ယူသွားနိုင်သည်! ဝန်ထမ်းကို မေးပါ: <strong>「持ち帰りできますか？」</strong>",
+    takeout_pack:"ဓားသွင်းတစ်ချောင်းချင်းစီ ထုပ်ပိုးပေး — လမ်းတွင် စားရန် သို့မဟုတ် လက်ဆောင်အဖြစ်",
+    takeout_pot:"မိမိဒယ်ကိုင်လာပြီး ပူနေသောအိုဒန် ထည့်ယူပါ — ဒေသခံဓလေ့!",
+    takeout_time:"ဖွင့်ချိန်တွင် ရနိုင်သည်။ စောစောလာပါ!",
+    access_title:"သွားရောက်နည်း",access_body:"<strong>Sengen-dori</strong> လမ်းပေါ်ရှိ၊ Shin-Shizuoka ဘူတာမှ ခြေလျင်သွား။ လိမ္မောင်ရောင်မီးပြာကို ရှာပါ!",
+    menu_title:"ပါဝင်ပစ္စည်းလမ်းညွှန် 🍢",menu_sub:"~17 မျိုးကို လေ့လာပါ!",
+    f_all:"အားလုံး",f_must:"⭐ မဖြစ်မနေ",f_fish:"🐟 ငါး",f_meat:"🥩 အသား",f_veg:"🥦 သက်သတ်",
+    howto_title:"関東煮 ခံစားနည်း",howto_sub:"ဤအဆင့်များကို လိုက်နာပါ",
+    tips_title:"💡 အကြံပြုချက်",cul_title:"ယဉ်ကျေးမှု",cul_sub:"ယဉ်ကျေးမှု နားလည်မှု ပိုကောင်းသောအတွေ့အကြုံ",
+    phr_title:"အသုံးဝင်သောစကား",phr_sub:"သဘာဝကျကျ ဆက်ဆံပါ",
+    fb_title:"တုံ့ပြန်ချက်",fb_sub:"漢使研 ကိုကူညီပါ!",
+    fb_sec1:"၁. အတွေ့အကြုံ",fb_q_taste:"အရသာ?",fb_q_guide:"လမ်းညွှန်အသုံးဝင်?",fb_q_culture:"ယဉ်ကျေးမှုသတင်းကူညီ?",
+    fb_sec2:"၂. ဘာသာ",fb_lang_used:"မည်သည့်ဘာသာ?",fb_lang_clear:"ဘာသာပြန် တိကျ?",fb_add_lang:"ထပ်ထည့်ချင်သောဘာသာ?",
+    fb_sec3:"၃. အကြောင်းအရာ",fb_missing:"မည်သည့်သတင်းပျောက်?",
+    fb_m1:"ပါဝင်ပစ္စည်းအသေးစိတ်",fb_m2:"ဓာတ်မတည့်သတင်း",fb_m3:"စားနည်း",fb_m4:"သမိုင်း/ယဉ်ကျေး",fb_m5:"ဓာတ်ပုံ",fb_m6:"ယူသွားသတင်း",
+    fb_sec4:"၄. မှတ်ချက်",fb_free_q:"အကြံပြုချက်?",fb_country_q:"နိုင်ငံ?",
+    btn_submit:"တုံ့ပြန်ချက်ပေးပို့ ✓",fb_thanks:"ကျေးဇူးတင်!",toast_fb:"ပေးပို့ပြီး! 🙏",
+  }
+};
+
+// ========== MENU ITEMS ==========
+// Photos: emoji fallback used since real photos depend on public image URLs
+const MENU = [
+  {id:1, jp:"黒はんぺん", en:"Kuro Hanpen",zh:"黑酣片",vi:"Bánh cá đen",th:"คุโระฮันเปน",id2:"Kue Ikan Hitam",ko:"구로 한펜",my:"ငါးကိတ်အနက်",
+   desc_en:"Shizuoka's most iconic ingredient. Whole mackerel & sardine (bones & skin included) ground together — grey-black color, rich umami, slightly chewy. Made in Yaizu. You cannot find this anywhere else! 🌟",
+   desc_zh:"静冈最具代表性的食材。以整条鲭鱼/沙丁鱼（含骨含皮）磨碎制成，灰黑色，鲜味浓郁，稍有嚼劲。焼津特产，全国罕见。🌟",
+   cat:"fish",must:true,pop:true,emoji:"🐟",allergy:["fish"],
+   photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Shizuoka_Oden_01.jpg/320px-Shizuoka_Oden_01.jpg"},
+  {id:2, jp:"牛すじ", en:"Beef Tendon",zh:"牛筋",vi:"Gân bò",th:"เอ็นวัว",id2:"Urat Sapi",ko:"소힘줄",my:"နွားကြော်",
+   desc_en:"Slow-simmered beef tendon that has absorbed hours of tsugi-tashi broth. Silky, melt-in-your-mouth. Also enriches the broth itself. 🌟",
+   desc_zh:"慢炖牛筋，吸收数小时秘制汤底，入口即化，同时也是赋予汤底浓郁鲜味的来源。🌟",
+   cat:"meat",must:true,pop:true,emoji:"🥩",allergy:["beef"],
+   photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Shizuoka_Oden_01.jpg/320px-Shizuoka_Oden_01.jpg"},
+  {id:3, jp:"じゃがいも", en:"Potato (Hokkaido)",zh:"土豆（北海道今金产）",vi:"Khoai tây (Hokkaido)",th:"มันฝรั่ง (ฮอกไกโด)",id2:"Kentang (Hokkaido)",ko:"감자 (홋카이도산)",my:"အာလူး (ဟော့ကိုင်းဒို)",
+   desc_en:"A specialty of おがわ! Sourced exclusively from <strong>Imagane, Hokkaido</strong>. Simmered until fluffy inside, deeply flavored by the broth. One of the most beloved items.",
+   desc_zh:"おがわ的招牌！专门选用<strong>北海道今金产</strong>土豆，炖至内部松软，充分吸收汤底，深受食客喜爱。",
+   cat:"veg",must:true,pop:false,emoji:"🥔",allergy:[],
+   photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Potato_and_cross_section.jpg/320px-Potato_and_cross_section.jpg"},
+  {id:4, jp:"こんにゃく", en:"Konjac",zh:"魔芋",vi:"Konjac",th:"บุก",id2:"Konjak",ko:"곤약",my:"ကွန်ညာကု",
+   desc_en:"Firm jelly-like block from the konjac plant. Almost tasteless on its own, but absorbs the rich broth beautifully. Great first bite to taste the broth.",
+   desc_zh:"魔芋块，质地弹韧，味道清淡，极易吸收汤底，是感受汤底风味的绝佳选择。",
+   cat:"veg",must:false,pop:false,emoji:"🟫",allergy:[],
+   photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Shizuoka_Oden_01.jpg/320px-Shizuoka_Oden_01.jpg"},
+  {id:5, jp:"大根", en:"Daikon Radish",zh:"白萝卜",vi:"Củ cải trắng",th:"หัวไชเท้า",id2:"Lobak Putih",ko:"무",my:"ဓိုင်ကွန်",
+   desc_en:"Classic white radish simmered until completely soft. Acts like a sponge for the dark broth — simple, comforting, deeply flavored.",
+   desc_zh:"经典白萝卜，炖至完全软烂，如海绵般吸饱黑色汤汁，质朴而令人回味。",
+   cat:"veg",must:false,pop:false,emoji:"⬜",allergy:[],
+   photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Shizuoka_Oden_01.jpg/320px-Shizuoka_Oden_01.jpg"},
+  {id:6, jp:"卵", en:"Egg",zh:"鸡蛋",vi:"Trứng",th:"ไข่",id2:"Telur",ko:"달걀",my:"ဥ",
+   desc_en:"Hard-boiled egg simmered in the dark stock. Beautiful marbled brown surface, perfectly set yolk. Comforting and filling.",
+   desc_zh:"水煮蛋在黑色汤底中慢炖，表面呈现漂亮棕色纹路，蛋黄恰到好处。",
+   cat:"veg",must:false,pop:false,emoji:"🥚",allergy:["egg"],
+   photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Shizuoka_Oden_01.jpg/320px-Shizuoka_Oden_01.jpg"},
+  {id:7, jp:"ちくわ", en:"Chikuwa",zh:"竹轮",vi:"Chikuwa",th:"ชิกุวะ",id2:"Chikuwa",ko:"치쿠와",my:"ချီကူဝါ",
+   desc_en:"Hollow cylindrical fish cake, lightly grilled. Springy, mild seafood taste. Soaks up Shizuoka's unique broth for a local character.",
+   desc_zh:"中空圆柱形鱼糕，表面略烤，弹性好，海鲜味清淡，在静冈汤底中别有风味。",
+   cat:"fish",must:false,pop:false,emoji:"🍙",allergy:["fish","wheat"],
+   photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Shizuoka_Oden_01.jpg/320px-Shizuoka_Oden_01.jpg"},
+  {id:8, jp:"さつま揚げ", en:"Satsuma-age",zh:"萨摩炸鱼糕",vi:"Bánh cá chiên",th:"ซัตสึมะอาเกะ",id2:"Kue Ikan Goreng",ko:"사쓰마아게",my:"ငါးကေ့ကင်",
+   desc_en:"Golden deep-fried fish cake — crispy outside, soft inside. Often contains vegetables. Made from Shizuoka's abundant local seafood.",
+   desc_zh:"金黄色油炸鱼糕，外脆内嫩，有时含有蔬菜，以静冈丰富海产品为原料。",
+   cat:"fish",must:false,pop:false,emoji:"🟡",allergy:["fish","wheat"],
+   photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Shizuoka_Oden_01.jpg/320px-Shizuoka_Oden_01.jpg"},
+  {id:9, jp:"厚揚げ", en:"Atsu-age (Fried Tofu)",zh:"厚炸豆腐",vi:"Đậu phụ chiên dày",th:"เต้าหู้ทอด",id2:"Tahu Goreng",ko:"두꺼운 유부",my:"ပဲသိုက်ကြော်",
+   desc_en:"Thick block of deep-fried tofu. Crispy outside, silky inside. Fully plant-based. Great option for vegetarians.",
+   desc_zh:"厚块油炸豆腐，外脆内嫩，纯素食选择。",
+   cat:"veg",must:false,pop:false,emoji:"🟨",allergy:["soy"],
+   photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Shizuoka_Oden_01.jpg/320px-Shizuoka_Oden_01.jpg"},
+  {id:10, jp:"豚モツ", en:"Pork Offal",zh:"猪杂",vi:"Lòng heo",th:"เครื่องใน",id2:"Jeroan Babi",ko:"돼지 내장",my:"ဝက်အူမ",
+   desc_en:"Pork offal cooked tender over hours. Contributes greatly to the depth and richness of the tsugi-tashi broth.",
+   desc_zh:"猪杂经长时间炖煮至软嫩，为汤底的浓郁鲜味贡献良多。",
+   cat:"meat",must:false,pop:false,emoji:"🥩",allergy:["pork"],
+   photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Shizuoka_Oden_01.jpg/320px-Shizuoka_Oden_01.jpg"},
+  {id:11, jp:"しらたき", en:"Shirataki Noodles",zh:"白瀧粉丝",vi:"Bún shirataki",th:"เส้นชิราตากิ",id2:"Mie Shirataki",ko:"실곤약",my:"ရှီရာတာကိခေါက်ဆွဲ",
+   desc_en:"Thin translucent noodles made from konjac. Slippery, mild, low-calorie. Absorbs the broth gently.",
+   desc_zh:"用魔芋制成的细白透明粉丝，爽滑、清淡、低热量，温和吸收汤底。",
+   cat:"veg",must:false,pop:false,emoji:"🍜",allergy:[],
+   photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Shizuoka_Oden_01.jpg/320px-Shizuoka_Oden_01.jpg"},
+  {id:12, jp:"ごぼう天", en:"Gobou-ten (Burdock Tempura)",zh:"牛蒡天妇罗",vi:"Tempura ngưu bàng",th:"โกโบทัมปุระ",id2:"Tempura Burdok",ko:"우엉 튀김",my:"ဂိုဘိုး ထမ်ပူရာ",
+   desc_en:"Burdock root wrapped in fish paste and deep-fried. Earthy, crunchy texture contrasts beautifully with the soft broth-soaked ingredients.",
+   desc_zh:"牛蒡根裹鱼糜油炸，带有独特的土香和酥脆口感，与汤底柔软食材形成美妙对比。",
+   cat:"fish",must:false,pop:false,emoji:"🌰",allergy:["fish","wheat"],
+   photo:"https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Shizuoka_Oden_01.jpg/320px-Shizuoka_Oden_01.jpg"},
+];
+
+const STEPS = [
+  {en:"Sit down and look at the menu displayed in the shop — items are usually shown with photos and numbers. Use this guide's Menu tab to understand each ingredient before you choose.",
+   zh:"坐下来，查看店内展示的菜单——食材通常标有图片和编号。用本指南的「食材」页面了解每种食材，再做决定。",
+   vi:"Ngồi xuống xem thực đơn trong cửa hàng. Dùng tab Thực đơn trong hướng dẫn này để hiểu từng nguyên liệu.",
+   th:"นั่งลงและดูเมนูในร้าน ใช้แท็บเมนูในคู่มือนี้เพื่อทำความเข้าใจแต่ละวัตถุดิบ",
+   id:"Duduk dan lihat menu di toko. Gunakan tab Menu di panduan ini untuk memahami bahan.",
+   ko:"앉아서 가게 메뉴를 보세요. 이 가이드의 메뉴 탭으로 각 재료를 이해하세요.",
+   my:"ထိုင်ပြီး ဆိုင်မီနူးကြည့်ပါ။ ဤလမ်းညွှန်၏ မီနူးတက်ဘ်ကိုသုံးပါ",emoji:"🪑"},
+  {en:"When your skewers arrive, immediately sprinkle dashi powder (だし粉) generously over them, then add aonori (青のり — green seaweed flakes). This is NOT optional garnish — it IS the essential seasoning. The dish is incomplete without it!",
+   zh:"食材一到，立即慷慨地撒上鱼粉（だし粉），再加上青海苔（青のり）。这不是装饰，而是必不可少的调味——少了这步，关东煮就不完整！",
+   vi:"Khi xiên đến, ngay lập tức rắc bột dashi, rồi thêm aonori. Đây là gia vị thiết yếu, không phải trang trí!",
+   th:"เมื่ออาหารมาถึง โรยผง dashi และ aonori ทันที นี่คือการปรุงรสที่จำเป็น ไม่ใช่การตกแต่ง!",
+   id:"Saat tusukan tiba, langsung taburi bubuk dashi dan aonori. Ini bumbu wajib, bukan hiasan!",
+   ko:"꼬치가 오면 바로 다시 파우더와 아오노리를 뿌리세요. 선택이 아닌 필수 양념입니다!",
+   my:"ဓားသွင်းများ ရောက်သည်နှင့် ဒါရှိမှုန့်နှင့် Aonori ဖြန်းပါ။ မဖြစ်မနေ ထည့်ရမည်!",emoji:"🫙"},
+  {en:"Add Karashi (からし — Japanese mustard) on the side for a sharp kick, or dip into Miso (みそ) for a richer flavour. Both are optional but traditional accompaniments that enhance the experience.",
+   zh:"如果喜欢辛辣的对比，可加少许芥末（からし）；也可蘸味噌（みそ）获得更丰富的风味。两者均为传统搭配，视个人喜好选用。",
+   vi:"Thêm Karashi (mù tạt) để có vị cay, hoặc chấm Miso. Cả hai là truyền thống nhưng không bắt buộc.",
+   th:"เพิ่ม Karashi เพื่อรสเผ็ด หรือจิ้ม Miso ทั้งสองเป็นเครื่องเคียงแบบดั้งเดิม",
+   id:"Tambahkan Karashi untuk rasa pedas, atau celupkan ke Miso. Keduanya tradisional tapi opsional.",
+   ko:"가라시를 추가하거나 미소에 찍어 드세요. 전통적인 선택사항입니다.",
+   my:"Karashi ထည့်ပါ သို့မဟုတ် Miso တွင်နှစ်ပါ",emoji:"🌿"},
+  {en:"Hold the skewer and eat directly — no chopsticks needed! This is the casual, street-food charm of Shizuoka Oden. Place used skewers in the cup or holder provided. The staff counts them to calculate your bill — the traditional way.",
+   zh:"拿着串直接吃——不需要筷子！这正是静冈关东煮街头小食的魅力所在。用完的竹签放入店家提供的杯子，工作人员会清点竹签来计算账单。",
+   vi:"Cầm xiên ăn trực tiếp — không cần đũa! Đặt xiên đã dùng vào cốc. Nhân viên đếm xiên để tính tiền.",
+   th:"จับไม้เสียบทานโดยตรง ไม่ต้องตะเกียบ! วางไม้ในถ้วยที่จัดไว้ พนักงานนับไม้คิดเงิน",
+   id:"Pegang tusukan dan makan langsung — tidak perlu sumpit! Letakkan bekas di gelas. Staf menghitung untuk tagihan.",
+   ko:"꼬치를 들고 바로 드세요 — 젓가락 불필요! 다 드신 꼬치는 컵에 놓으세요. 직원이 계산합니다.",
+   my:"ဓားသွင်းကိုင်ပြီး တိုက်ရိုက်စားပါ — ချော်မလိုမပေ! ဖန်ခွက်ပေါ် ဓားသွင်းချပါ",emoji:"🥢"},
+];
+
+const TIPS = [
+  {en:"🖤 Don't be scared of the black broth — it looks dramatic but tastes surprisingly mild and clean. The colour comes from soy and years of slow cooking.",zh:"🖤 别被黑色汤底吓到——颜色虽深，入口却出人意料地清爽鲜美。颜色来自酱油和多年慢炖的积累。",vi:"🖤 Đừng sợ nước dùng đen — màu đậm nhưng vị thanh nhẹ và sạch.",th:"🖤 ไม่ต้องกลัวน้ำซุปดำ — รสชาติเบาและสะอาด ไม่หนักอย่างที่คิด",id:"🖤 Jangan takut kuah hitam — rasanya mengejutkan ringan dan bersih.",ko:"🖤 검은 국물에 겁먹지 마세요 — 담백하고 깔끔합니다.",my:"🖤 ဟင်းရည်အနက်ကို မကြောက်ပါနဲ့ — အရောင်မှောင်သော်လည်း အရသာပါးလွှာ"},
+  {en:"🧂 Dashi powder + Aonori = the soul of Shizuoka Oden. Always add them — they transform the dish from simple to iconic.",zh:"🧂 鱼粉＋青海苔＝静冈关东煮的灵魂，一定要加——它们让这道菜从「简单」升华为「经典」。",vi:"🧂 Bột dashi + Aonori = linh hồn Oden Shizuoka. Luôn thêm vào!",th:"🧂 ผง dashi + Aonori = จิตวิญญาณ ต้องเติมเสมอ!",id:"🧂 Bubuk dashi + Aonori = jiwa Oden Shizuoka. Selalu tambahkan!",ko:"🧂 다시 파우더 + 아오노리 = 오뎅의 영혼. 항상 추가!",my:"🧂 ဒါရှိမှုန့် + Aonori = ဝိညာဉ်ဖြစ်သည်။ အမြဲထည့်ပါ"},
+  {en:"🚫 Don't drink the broth directly — Shizuoka Oden is a 'dry topping' style. The dashi powder is your seasoning, not the soup.",zh:"🚫 不要直接喝汤——静冈关东煮是「干配料」风格，鱼粉才是你的调味料。",vi:"🚫 Đừng uống nước dùng trực tiếp — Oden Shizuoka là phong cách 'topping khô'.",th:"🚫 อย่าดื่มน้ำซุปโดยตรง โอเด้นชิซูโอกะเป็นสไตล์ 'เครื่องปรุงแห้ง'",id:"🚫 Jangan minum kuah langsung — Oden Shizuoka bergaya 'topping kering'.",ko:"🚫 국물을 직접 마시지 마세요 — 건식 토핑 스타일입니다.",my:"🚫 ဟင်းရည်ကို တိုက်ရိုက်မသောက်ပါနဲ့"},
+  {en:"♻️ The tsugi-tashi (継ぎ足し) broth is a living heritage — the same base pot replenished daily for decades. You are tasting history.",zh:"♻️「継ぎ足し」汤底是活的遗产——同一口锅每天补充，延续数十年。你品尝的是历史。",vi:"♻️ Nước dùng tsugi-tashi là di sản sống — cùng một nồi bổ sung hàng ngày trong hàng thập kỷ.",th:"♻️ น้ำซุป tsugi-tashi คือมรดกที่มีชีวิต — เติมหม้อเดิมทุกวันมาหลายสิบปี",id:"♻️ Kuah tsugi-tashi adalah warisan hidup — pot yang sama diisi setiap hari selama puluhan tahun.",ko:"♻️ 쓰기타시 국물은 살아있는 유산 — 수십 년간 매일 같은 냄비를 보충합니다.",my:"♻️ Tsugi-tashi ဟင်းရည်သည် နှစ်ပေါင်းများစွာ ဆက်ခံလာသောအမွေ"},
+];
+
+const CULTURE = [
+  {en:{h:"継ぎ足し — The Living Broth",b:"The tsugi-tashi method means topping up the same pot every day without ever emptying it. Over the years, the broth develops extraordinary depth and complexity. At おがわ, the broth carries decades of accumulated flavor. When you eat here, you taste not just today's broth — but time itself.",sub:"Some Shizuoka shops maintain the same broth base for 30–50+ years"},
+   zh:{h:"継ぎ足し——活着的汤底",b:"「継ぎ足し」意为每天向同一口锅中补充汤底，从不倒空。经年累月，汤底积累出非凡的层次与深度。在おがわ，汤底承载着数十年的积累。你品尝的，不只是今天的汤——而是时光本身。",sub:"静冈部分老店已将同一锅汤维持30～50年以上"}},
+  {en:{h:"Dagashiya Culture — Oden for Everyone",b:"Before specialty shops, Shizuoka Oden was sold in dagashiya (駄菓子屋 — candy stores). Children stopped by after school; housewives brought pots to fill. This deeply democratic food culture — affordable, no dress code, eaten standing up — is what makes Shizuoka Oden feel so warm and welcoming.",sub:"Some dagashiya in Shizuoka still serve oden today"},
+   zh:{h:"駄菓子屋文化——人人皆可享用的关东煮",b:"在专门店出现之前，关东煮在零食杂货铺（駄菓子屋）出售。孩子们放学后来买一串，主妇们拎着锅来打包。这种极具包容性的街头饮食文化——价格亲民、无着装要求、站着就能吃——正是关东煮独特温暖魅力的来源。",sub:"今日静冈仍有駄菓子屋出售关东煮"}},
+  {en:{h:"黒はんぺん — A Shizuoka Original",b:"Made in Yaizu City — Japan's premier bonito (katsuobushi) production hub. Unlike white hanpen (sold nationally), kuro hanpen uses whole mackerel or sardine including skin and bones, all ground together. The result is nutrient-dense, umami-rich, with a distinctive grey-black colour. Over 90% of production is consumed within Shizuoka Prefecture.",sub:"Fish: mainly mackerel (saba) & sardine (iwashi) from Suruga Bay"},
+   zh:{h:"黑酣片——静冈原创",b:"产自焼津市——日本最重要的鲣节产地。与全国常见的白色鱼糕不同，黑酣片以整条鲭鱼/沙丁鱼（含骨含皮）磨碎制成，营养丰富，鲜味浓郁，呈独特灰黑色。90%以上的产量在静冈县内消费。",sub:"使用鱼类：主要为骏河湾的鲭鱼（さば）和沙丁鱼（いわし）"}},
+];
+
+const PHRASES = [
+  {jp:"これをください",rom:"Kore wo kudasai",en:"I'd like this one, please.",zh:"我要这个，谢谢。",vi:"Cho tôi cái này.",th:"ขอตัวนี้ครับ/ค่ะ",id2:"Saya mau yang ini.",ko:"이것 주세요.",my:"ဒါပေးပါ"},
+  {jp:"おすすめは何ですか？",rom:"Osusume wa nan desu ka?",en:"What do you recommend?",zh:"您推荐什么？",vi:"Bạn gợi ý gì?",th:"แนะนำอะไรบ้าง?",id2:"Apa rekomendasinya?",ko:"추천이 뭔가요?",my:"ဘာကိုအကြံပြု?"},
+  {jp:"持ち帰りできますか？",rom:"Mochikaeri dekimasu ka?",en:"Can I take this to go?",zh:"可以打包带走吗？",vi:"Có thể mang về không?",th:"สั่งกลับบ้านได้ไหมครับ/ค่ะ?",id2:"Bisa dibawa pulang?",ko:"포장 가능한가요?",my:"ယူသွားနိုင်ပါသလား?"},
+  {jp:"だし粉をかけてもいいですか？",rom:"Dashiko wo kakete mo ii desu ka?",en:"May I sprinkle dashi powder?",zh:"我可以撒鱼粉吗？",vi:"Tôi có thể rắc bột dashi không?",th:"โรยผง dashi ได้ไหม?",id2:"Boleh taburkan bubuk dashi?",ko:"다시 파우더 뿌려도 될까요?",my:"ဒါရှိမှုန့်ဖြန်းနိုင်ပါသလား?"},
+  {jp:"おいしいです！",rom:"Oishi desu!",en:"It's delicious!",zh:"太好吃了！",vi:"Ngon lắm!",th:"อร่อยมาก!",id2:"Enak sekali!",ko:"맛있어요!",my:"ရသကောင်းတယ်!"},
+  {jp:"お会計をお願いします",rom:"Okaikei wo onegai shimasu",en:"Check, please.",zh:"请结账。",vi:"Tính tiền giúp tôi.",th:"เก็บเงินด้วย",id2:"Minta bon.",ko:"계산해 주세요.",my:"ငွေသွင်းချင်ပါ"},
+  {jp:"魚が入っていますか？",rom:"Sakana ga haitte imasu ka?",en:"Does this contain fish?",zh:"这里面有鱼吗？",vi:"Món này có cá không?",th:"มีปลาไหม?",id2:"Ada ikannya?",ko:"생선 들어있나요?",my:"ငါးပါဝင်သလား?"},
+  {jp:"とても楽しかったです！",rom:"Totemo tanoshikatta desu!",en:"I had a wonderful time!",zh:"非常愉快！",vi:"Rất vui!",th:"สนุกมากเลย!",id2:"Sangat menyenangkan!",ko:"정말 즐거웠어요!",my:"အလွန်ပျော်ဖြစ်ခဲ့တယ်!"},
+];
+
+// ========== APP STATE ==========
+let lang = 'en';
+let stars = {taste:0,guide:0,culture:0,lang2:0};
+let menuFilter = 'all';
+
+function L(k){ return (LANGS[lang]&&LANGS[lang][k]) || LANGS.en[k] || k; }
+
+function setLang(l){
+  lang = l;
+  document.querySelectorAll('.lbtn').forEach(b=>{
+    b.classList.toggle('on', b.getAttribute('onclick').includes("'"+l+"'"));
+  });
+  applyLang();
+  renderMenu(); renderHowTo(); renderCulture(); renderPhrases();
+}
+function applyLang(){
+  document.querySelectorAll('[data-key]').forEach(el=>{
+    const k = el.getAttribute('data-key');
+    const t = L(k);
+    if(el.tagName==='INPUT' && el.type==='text') el.placeholder = t;
+    else el.innerHTML = t;
+  });
+  document.getElementById('logo-sub').textContent = L('logo_sub');
+}
+
+function goTab(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('pg-'+id).classList.add('on');
+  const idx = ['home','shop','menu','howto','culture','phrases','feedback'].indexOf(id);
+  if(idx>=0) document.querySelectorAll('.tab')[idx].classList.add('on');
+}
+
+function filterMenu(f, btn){
+  menuFilter = f;
+  document.querySelectorAll('.fbtn2').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderMenu();
+}
+
+function renderMenu(){
+  let items = MENU;
+  if(menuFilter==='must') items = MENU.filter(i=>i.must);
+  else if(menuFilter!=='all') items = MENU.filter(i=>i.cat===menuFilter);
+  const lc = lang;
+  document.getElementById('menu-grid').innerHTML = items.map(item=>{
+    const nm = item[lc] || item.id2 || item.en;
+    const desc = item['desc_'+lc] || item.desc_en;
+    return `<div class="menu-item">
+      <div class="mi-img-wrap">
+        <img src="${item.photo}" alt="${nm}"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+          style="display:block">
+        <div class="mi-emoji-fb" style="display:none">${item.emoji}</div>
+        ${item.must?'<div class="must-badge">⭐ MUST TRY</div>':''}
+        ${item.pop?'<div class="pop-badge">🔥 POPULAR</div>':''}
+      </div>
+      <div class="mi-body">
+        <div class="mi-top">
+          <div class="mi-num">${item.id}</div>
+          <div><div class="mi-name">${item.emoji} ${nm}</div><div class="mi-jp">${item.jp}</div></div>
+        </div>
+        <div class="mi-desc">${desc}</div>
+        <div class="mi-tags">
+          ${item.cat==='fish'?'<span class="tag tag-fish">🐟 Fish</span>':''}
+          ${item.cat==='meat'?'<span class="tag tag-meat">🥩 Meat</span>':''}
+          ${item.cat==='veg'?'<span class="tag tag-veg">🥦 Plant-based</span>':''}
+        </div>
+        <div class="allergy-row">
+          ${['fish','beef','pork','egg','wheat','soy'].map(a=>`<span class="alg${item.allergy.includes(a)?' contains':''}">${a}</span>`).join('')}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderHowTo(){
+  document.getElementById('steps-container').innerHTML = STEPS.map((s,i)=>`
+    <div class="step"><div class="step-num">${i+1}</div>
+    <div class="step-body"><h3>${s.emoji} Step ${i+1}</h3><p>${s[lang]||s.en}</p></div></div>`).join('');
+  document.getElementById('tips-container').innerHTML = TIPS.map(t=>`
+    <div class="tip-box"><p>${t[lang]||t.en}</p></div>`).join('');
+}
+
+function renderCulture(){
+  const lc = lang;
+  document.getElementById('culture-container').innerHTML = CULTURE.map(c=>{
+    const d = c[lc] || c.en;
+    return `<div class="cul-card"><h3>${d.h}</h3><p>${d.b}</p><div class="sub">📎 ${d.sub}</div></div>`;
+  }).join('');
+}
+
+function renderPhrases(){
+  const lc = lang;
+  document.getElementById('phrase-grid').innerHTML = PHRASES.map(p=>`
+    <div class="phrase-card">
+      <div class="phrase-jp">${p.jp}</div>
+      <div class="phrase-rom">${p.rom}</div>
+      <div class="phrase-tr">${p[lc]||p.id2||p.en}</div>
+    </div>`).join('');
+}
+
+function setStar(group, val){
+  stars[group] = val;
+  document.getElementById('stars-'+group).querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('on',i<val));
+}
+
+function submitFeedback(){
+  const entry = {
+    ts: new Date().toISOString(),
+    lang_used: document.getElementById('fb-lang-used').value,
+    stars,
+    add_lang: document.getElementById('fb-add-lang').value,
+    missing: {m1:document.getElementById('fb-m1').checked,m2:document.getElementById('fb-m2').checked,m3:document.getElementById('fb-m3').checked,m4:document.getElementById('fb-m4').checked,m5:document.getElementById('fb-m5').checked,m6:document.getElementById('fb-m6').checked},
+    free: document.getElementById('fb-free').value,
+    country: document.getElementById('fb-country').value,
+  };
+  console.log('FEEDBACK:', JSON.stringify(entry,null,2));
+  document.getElementById('fb-success').classList.add('on');
+  const t = document.getElementById('toaster');
+  t.textContent = L('toast_fb'); t.classList.add('on');
+  setTimeout(()=>t.classList.remove('on'), 2500);
+}
+
+setLang('en');
+</script>
+</body>
+</html>
